@@ -1,14 +1,14 @@
 package andrusca.vitali;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -22,29 +22,33 @@ import java.nio.file.Path;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
+
 public class Technology {
     private static final Logger logger = LoggerFactory.getLogger(Technology.class);
 
     private String techName;
     private String technologyDescription;
 
+    Path createPathFromString(String path) {
+        return Path.of(path);
+    }
 
-    void writeToJson(String path) {
-
-        Path pathToJsonFile = Path.of(path);
 
 
-        /*logger.info("Created POJO :  %s ", technology);
-        Technology technology = new Technology("MyJakarta", "Java EE Technology");*/
+    void writeToJson(String path) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Technology technology = new Technology("test technology", "test technologyDescription");
+        String serializedTechnologyObject = objectMapper.writeValueAsString(technology);
+        Path location = Files.createFile(createPathFromString(path));
+        Files.writeString(location,serializedTechnologyObject );
 
-/*        Gson gson = new Gson();*/
 
-   /*     try {
-            gson.toJson(technology, new FileWriter(pathToJsonFile.toFile()));
-        } catch (IOException e) {
-            logger.info(e.getMessage());
-        }
-*/
+
+
+        Path file = createPathFromString(path);
+
+        Files.createFile(file);
+
 
     }
 
