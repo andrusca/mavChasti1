@@ -2,6 +2,7 @@ package andrusca.vitali;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @Data
 @RequiredArgsConstructor
+@AllArgsConstructor
 
 public class Technology {
     private static final Logger logger = LoggerFactory.getLogger(Technology.class);
@@ -31,7 +33,6 @@ public class Technology {
     private ObjectMapper objectMapper;
 
     public Technology(String testTechnology, String testTechnologyDescription) {
-
     }
 
     Path createPathFromString(String path) {
@@ -42,18 +43,23 @@ public class Technology {
 
     void writeToJson(String path) throws IOException {
         objectMapper = new ObjectMapper();
-
         Technology technology = new Technology("test technology", "test technologyDescription");
         String serializedTechnologyObject = objectMapper.writeValueAsString(technology);
         Path location = Files.createFile(createPathFromString(path));
         Files.writeString(location,serializedTechnologyObject );
-        Path file = createPathFromString(path);
-        Files.createFile(file);
+        Path fileInSystem = createPathFromString(path);
+        Files.createFile(fileInSystem);
+
+        if (!Files.exists(fileInSystem)) {
+            logger.info("file %s not succesefuly saved",fileInSystem);
+        }
+        logger.info("file %s not succesefuly saved",fileInSystem);
+
+
 
     }
 
     MyJakarta readFromJson(String technology) {
-
         objectMapper = new ObjectMapper();
         String jsonTechnology = """
                 {
