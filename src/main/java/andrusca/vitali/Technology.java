@@ -1,7 +1,7 @@
 package andrusca.vitali;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Class for
@@ -20,7 +21,6 @@ import java.nio.file.Path;
  */
 
 @Data
-@AllArgsConstructor
 @RequiredArgsConstructor
 
 public class Technology {
@@ -28,6 +28,11 @@ public class Technology {
 
     private String techName;
     private String technologyDescription;
+    private ObjectMapper objectMapper;
+
+    public Technology(String testTechnology, String testTechnologyDescription) {
+
+    }
 
     Path createPathFromString(String path) {
         return Path.of(path);
@@ -36,24 +41,35 @@ public class Technology {
 
 
     void writeToJson(String path) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper = new ObjectMapper();
+
         Technology technology = new Technology("test technology", "test technologyDescription");
         String serializedTechnologyObject = objectMapper.writeValueAsString(technology);
         Path location = Files.createFile(createPathFromString(path));
         Files.writeString(location,serializedTechnologyObject );
-
-
-
-
         Path file = createPathFromString(path);
-
         Files.createFile(file);
-
 
     }
 
-    MyJakarta readFromJson(Technology technology) {
-        return new MyJakarta();
+    MyJakarta readFromJson(String technology) {
+
+        objectMapper = new ObjectMapper();
+        String jsonTechnology = """
+                {
+                    "techName" : "%s",
+                    "technologyDescription" : "%s"
+                }
+                """.formatted("test read ", "test read description");
+        MyJakarta myJakarta;
+        try {
+            Technology technologyDeserialized = objectMapper.readValue(jsonTechnology, Technology.class);
+             myJakarta = new MyJakarta(1, "test",List.of(technologyDeserialized));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return  myJakarta;
+
 
     }
 

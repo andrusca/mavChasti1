@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 class TechnologyTest {
     private static final Logger logger = LoggerFactory.getLogger(TechnologyTest.class);
@@ -32,10 +34,23 @@ class TechnologyTest {
 
         }
 
-
-
-
-
+    }
+    @Test
+    void whenReadFromJsonThenOk() {
+        String jsonTechnology = """
+                {
+                    "techName" : "%s",
+                    "technologyDescription" : "%s"
+                }
+                
+                """.formatted("Test Read", "Test Read Description");
+        try {
+            Technology technology = objectMapper.readValue(jsonTechnology, Technology.class);
+            assertEquals("Test Read",technology.getTechName() );
+            assertEquals("Test Read Description",technology.getTechnologyDescription() );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
