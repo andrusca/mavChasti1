@@ -2,9 +2,7 @@ package andrusca.vitali;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,45 +20,39 @@ import java.util.List;
  */
 
 @Data
-@RequiredArgsConstructor
-@AllArgsConstructor
-
+@ToString
+@Builder
 public class Technology {
     private static final Logger logger = LoggerFactory.getLogger(Technology.class);
 
     private String techName;
     private String technologyDescription;
-    private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
-    public Technology(String testTechnology, String testTechnologyDescription) {
-    }
 
-    Path createPathFromString(String path) {
+
+    private Path createPathFromString(String path) {
         return Path.of(path);
     }
 
-
-
     void writeToJson(String path) throws IOException {
-        objectMapper = new ObjectMapper();
-        Technology technology = new Technology("test technology", "test technologyDescription");
-        String serializedTechnologyObject = objectMapper.writeValueAsString(technology);
+//        Technology technology = new Technology("test technology", "test technologyDescription");
+        String serializedTechnologyObject = objectMapper.writeValueAsString(this);
         Path location = Files.createFile(createPathFromString(path));
         Files.writeString(location,serializedTechnologyObject );
         Path fileInSystem = createPathFromString(path);
         Files.createFile(fileInSystem);
 
-        if (!Files.exists(fileInSystem)) {
+        if (Files.notExists(fileInSystem)) {
             logger.info("file %s not succesefuly saved",fileInSystem);
+            // exception
         }
         logger.info("file %s not succesefuly saved",fileInSystem);
-
-
 
     }
 
     MyJakarta readFromJson(String technology) {
-        objectMapper = new ObjectMapper();
+
         String jsonTechnology = """
                 {
                     "techName" : "%s",

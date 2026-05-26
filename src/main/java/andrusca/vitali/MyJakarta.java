@@ -28,12 +28,12 @@ public class MyJakarta {
     private static final String  pathFileStructure = "output.txt";
 
     public static void main(String[] args) {
-        Technology technology = new Technology("real technology", "developing stuff");
+        /*Technology technology = new Technology("real technology", "developing stuff");
         try {
             technology.writeToJson(pathFileStructure);
         } catch (IOException e) {
             log.info(e.getMessage());
-        }
+        }*/
     }
 
 

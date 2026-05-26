@@ -2,19 +2,19 @@ package andrusca.vitali;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
+@Slf4j
 class TechnologyTest {
-    private static final Logger logger = LoggerFactory.getLogger(TechnologyTest.class);
+    // private static final Logger logger = LoggerFactory.getLogger(TechnologyTest.class);
 
     ObjectMapper objectMapper;
+
     @BeforeEach
     void setUp(){
        objectMapper = new ObjectMapper();
@@ -23,15 +23,18 @@ class TechnologyTest {
 
     @Test
     void whenWriteToJsonThenOk() {
-        Technology technology = new Technology("MyJakarta", "Java EE Technology");
+        // Technology technology = new Technology("MyJakarta", "Java EE Technology");
+        Technology technology = Technology.builder()
+                .techName("MyJakarta")
+                .technologyDescription("Java EE Technology")
+                .build();
         try {
             String writeToJson = objectMapper.writeValueAsString(technology);
-            logger.info(writeToJson);
+            System.out.println(technology);
             assertTrue(writeToJson.contains("\"techName\":\"MyJakarta\""));
             assertTrue(writeToJson.contains("\"technologyDescription\":\"Java EE Technology"));
         } catch (JsonProcessingException e) {
-            logger.info(e.getMessage());
-
+            log.info(e.getMessage());
         }
 
     }
