@@ -37,14 +37,14 @@ public class MyJakarta {
         return Path.of(path);
     }
 
-     void writeToJson(String path) {
+    void writeToJson(String path) {
         Path targetFileToWrite = Paths.get(path);
         try {
             Files.createDirectories(targetFileToWrite.getParent());
             Files.createFile(targetFileToWrite);
             Technology technology = Technology.builder()
-                    .techName("NewTechName")
-                    .technologyDescription("NewDescription")
+                    .techName("2.0.NewTechName")
+                    .technologyDescription("2.0.NewDescription")
                     .build();
             String jsonData = objectMapper.writeValueAsString(technology);
             Files.writeString(targetFileToWrite, jsonData);
@@ -57,6 +57,16 @@ public class MyJakarta {
 
 
     }
+
+
+    Technology readFromJson(String jsonPath) throws IOException {
+        Technology technology = objectMapper.readValue(Paths.get(jsonPath).toFile(), Technology.class);
+        return technology;
+
+
+
+    }
+
 
     void updateTechnology(Technology technology) {
 

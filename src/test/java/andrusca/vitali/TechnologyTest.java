@@ -17,35 +17,32 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 class TechnologyTest {
-    private  ObjectMapper objectMapper;
 
+    private  ObjectMapper objectMapper;
     private static final String FILE_NAME =
             "D:/All-Projects/vitaliProject/jsonTechnology.json";
+    private MyJakarta myJakarta ;
 
 
     @BeforeEach
     void setUp(){
        objectMapper = new ObjectMapper();
+       myJakarta = new MyJakarta();
+
     }
 
 
     @Test
     void whenReadFromJsonThenOk() {
-        String jsonTechnology = """
-                {
-                    "techName" : "%s",
-                    "technologyDescription" : "%s"
-                }
-                
-                """.formatted("Test Read", """
-                Test Read Description""");
         try {
-            Technology technology = objectMapper.readValue(jsonTechnology, Technology.class);
-            assertEquals("Test Read",technology.getTechName() );
-            assertEquals("Test Read Description",technology.getTechnologyDescription() );
-        } catch (JsonProcessingException e) {
+            Technology technology = myJakarta.readFromJson(FILE_NAME);
+            assertEquals("2.0.NewTechName",technology.getTechName());
+            assertEquals("2.0.NewDescription", technology.getTechnologyDescription());
+
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
 
     }
 
@@ -53,6 +50,7 @@ class TechnologyTest {
     void whenSerializinTecnnology_thenCorrectJsonGenerated() {
         MyJakarta myJakarta = new MyJakarta();
         myJakarta.writeToJson(FILE_NAME);
+        assertTrue(Files.exists(Path.of(FILE_NAME)));
 
     }
 

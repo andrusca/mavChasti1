@@ -1,6 +1,5 @@
 package andrusca.vitali;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Builder;
 import lombok.Data;
@@ -32,23 +31,6 @@ public class Technology {
     }
 
 
-
-    MyJakarta readFromJson(String technology) {
-        String jsonTechnology = """
-                {
-                    "techName" : "%s",
-                    "technologyDescription" : "%s"
-                }
-                """.formatted("test read ", "test read description");
-
-        MyJakarta myJakarta = null;
-        try {
-            Technology technologyDeserialized = objectMapper.readValue(jsonTechnology, Technology.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return  myJakarta;
-    }
 
 
 }
