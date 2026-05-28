@@ -4,16 +4,24 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 class TechnologyTest {
-    // private static final Logger logger = LoggerFactory.getLogger(TechnologyTest.class);
+    private  ObjectMapper objectMapper;
 
-    ObjectMapper objectMapper;
+    private static final String FILE_NAME =
+            "D:/All-Projects/vitaliProject/jsonTechnology.json";
+
 
     @BeforeEach
     void setUp(){
@@ -22,23 +30,6 @@ class TechnologyTest {
 
 
     @Test
-    void whenWriteToJsonThenOk() {
-        // Technology technology = new Technology("MyJakarta", "Java EE Technology");
-        Technology technology = Technology.builder()
-                .techName("MyJakarta")
-                .technologyDescription("Java EE Technology")
-                .build();
-        try {
-            String writeToJson = objectMapper.writeValueAsString(technology);
-            System.out.println(technology);
-            assertTrue(writeToJson.contains("\"techName\":\"MyJakarta\""));
-            assertTrue(writeToJson.contains("\"technologyDescription\":\"Java EE Technology"));
-        } catch (JsonProcessingException e) {
-            log.info(e.getMessage());
-        }
-
-    }
-    @Test
     void whenReadFromJsonThenOk() {
         String jsonTechnology = """
                 {
@@ -46,7 +37,8 @@ class TechnologyTest {
                     "technologyDescription" : "%s"
                 }
                 
-                """.formatted("Test Read", "Test Read Description");
+                """.formatted("Test Read", """
+                Test Read Description""");
         try {
             Technology technology = objectMapper.readValue(jsonTechnology, Technology.class);
             assertEquals("Test Read",technology.getTechName() );
@@ -56,5 +48,25 @@ class TechnologyTest {
         }
 
     }
+
+    @Test
+    void whenSerializinTecnnology_thenCorrectJsonGenerated() {
+        MyJakarta myJakarta = new MyJakarta();
+        myJakarta.writeToJson(FILE_NAME);
+
+    }
+
+    @Test
+    void testFileCreation() throws IOException {
+        Path newFilePath = Paths.get(FILE_NAME);
+        Files.createDirectories(newFilePath.getParent());
+        System.out.println(newFilePath.getFileName().toString());
+
+
+    }
+
+
+
+
 
 }
